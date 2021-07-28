@@ -77,6 +77,35 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>com.rudikershaw.gitbuildhook</groupId>
+        <artifactId>git-build-hook-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <installHooks>
+            <pre-commit>git-hook-pre-commit.sh</pre-commit>
+          </installHooks>
+        </configuration>
+        <!--<dependencies>-->
+        <!--  <dependency>-->
+        <!--    <groupId>com.rudikershaw.gitbuildhook</groupId>-->
+        <!--    <artifactId>testing-cp-hooks</artifactId>-->
+        <!--    <version>1.2.3</version>-->
+        <!--  </dependency>-->
+        <!--</dependencies>-->
+        <executions>
+          <execution>
+            <id>check</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>initialize</goal>
+              <goal>install</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

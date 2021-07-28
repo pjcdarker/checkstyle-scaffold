@@ -37,6 +37,8 @@ export MAVEN_OPTS="-client
   -XX:TieredStopAtLevel=1
   -Xverify:none"
 
+mvn clean
+
 echo "run checkstyle:check"
 mvn -q -pl "$modules_arg" checkstyle:check
 

@@ -96,10 +96,7 @@
         <!--</dependencies>-->
         <executions>
           <execution>
-            <id>check</id>
-            <phase>validate</phase>
             <goals>
-              <goal>initialize</goal>
               <goal>install</goal>
             </goals>
           </execution>

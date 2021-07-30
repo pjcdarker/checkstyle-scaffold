@@ -6,8 +6,17 @@ public class Checkstyle {
         System.out.println("Hi Checkstyle v3.4.");
     }
 
-    public void spotbugs_check_NullPointerException() {
-        String text = null;
-        System.out.println(text.toLowerCase());
+    // public void spotbugs_check_NullPointerException() {
+    //     String text = null;
+    //     System.out.println(text.toLowerCase());
+    // }
+
+    public boolean check() {
+        return false;
     }
+
+    public boolean check2() {
+        return true;
+    }
+
 }

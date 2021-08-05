@@ -8,6 +8,7 @@ public class Checkstyle {
 
     public void spotbugs_check_NullPointerException() {
         String text = null;
+
         System.out.println(text.toLowerCase());
     }
 

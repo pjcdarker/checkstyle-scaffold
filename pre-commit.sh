@@ -41,8 +41,23 @@ mvn clean compile
 
 echo "run checkstyle:check"
 mvn -q -pl "$modules_arg" checkstyle:check
+mvn checkstyle:check
+result=$?
+echo "checkstyle:check result: $result"
+if [[ $result -ne 0 ]]
+then
+  echo "checkstyle:check fail"
+  exit 1
+fi
 
 echo "run spotbugs:check"
 mvn -q -pl "$modules_arg" spotbugs:check
+result=$?
+echo "spotbugs:check result: $result"
+if [[ $result -ne 0 ]]
+then
+  echo "spotbugs:check fail"
+  exit 1
+fi
 
 echo "run git pre commit hook finish..."

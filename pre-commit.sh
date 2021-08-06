@@ -15,6 +15,17 @@ function get_module() {
   done
 }
 
+function check_mvn_result() {
+  local result=$1
+  local msg=$2
+  echo "$msg result: $result"
+  if [[ $result -ne 0 ]]
+  then
+    echo "$msg fail"
+    exit 1
+  fi
+}
+
 modules=()
 
 for file in $(git diff --name-only --cached \*.java); do
@@ -37,27 +48,23 @@ export MAVEN_OPTS="-client
   -XX:TieredStopAtLevel=1
   -Xverify:none"
 
-mvn clean compile
+echo "mvn git-build-hook:install"
+mvn git-build-hook:install
 
-echo "run checkstyle:check"
+echo "mvn clean compile"
+mvn clean compile
+result=$?
+check_mvn_result $result "mvn compile"
+
+echo "mvn checkstyle:check"
 mvn -q -pl "$modules_arg" checkstyle:check
 mvn checkstyle:check
 result=$?
-echo "checkstyle:check result: $result"
-if [[ $result -ne 0 ]]
-then
-  echo "checkstyle:check fail"
-  exit 1
-fi
+check_mvn_result $result "checkstyle:check"
 
-echo "run spotbugs:check"
+echo "mvn spotbugs:check"
 mvn -q -pl "$modules_arg" spotbugs:check
 result=$?
-echo "spotbugs:check result: $result"
-if [[ $result -ne 0 ]]
-then
-  echo "spotbugs:check fail"
-  exit 1
-fi
+check_mvn_result $result "spotbugs:check"
 
 echo "run git pre commit hook finish..."

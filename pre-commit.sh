@@ -48,8 +48,8 @@ export MAVEN_OPTS="-client
   -XX:TieredStopAtLevel=1
   -Xverify:none"
 
-echo "mvn git-build-hook:install"
-mvn git-build-hook:install
+cp -rf ./pre-commit.sh ./.git/hooks/pre-commit
+chmod 744 ./.git/hooks/pre-commit
 
 echo "mvn clean compile"
 mvn clean compile
@@ -66,5 +66,10 @@ echo "mvn spotbugs:check"
 mvn -q -pl "$modules_arg" spotbugs:check
 result=$?
 check_mvn_result $result "spotbugs:check"
+
+echo "mvn verify(jacoco)"
+mvn -q -pl "$modules_arg" verify
+result=$?
+check_mvn_result $result "mvn verify(jacoco)"
 
 echo "run git pre commit hook finish..."

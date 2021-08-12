@@ -67,9 +67,9 @@ mvn -q -pl "$modules_arg" spotbugs:check
 result=$?
 check_mvn_result $result "spotbugs:check"
 
-echo "mvn verify(jacoco)"
-mvn -q -pl "$modules_arg" verify
+echo "mvn test"
+mvn -q -pl "$modules_arg" test
 result=$?
-check_mvn_result $result "mvn verify(jacoco)"
+check_mvn_result $result "mvn test"
 
 echo "run git pre commit hook finish..."

@@ -52,23 +52,12 @@ cp -rf ./pre-commit.sh ./.git/hooks/pre-commit
 chmod 744 ./.git/hooks/pre-commit
 
 echo "mvn clean compile"
-mvn clean compile
+mvn clean compiler:compile
 result=$?
 check_mvn_result $result "mvn compile"
 
-echo "mvn checkstyle:check"
-mvn -q -pl "$modules_arg" checkstyle:check
-mvn checkstyle:check
-result=$?
-check_mvn_result $result "checkstyle:check"
-
-echo "mvn spotbugs:check"
-mvn -q -pl "$modules_arg" spotbugs:check
-result=$?
-check_mvn_result $result "spotbugs:check"
-
 echo "mvn test"
-mvn -q -pl "$modules_arg" test
+mvn -pl "$modules_arg" test
 result=$?
 check_mvn_result $result "mvn test"
 

@@ -16,14 +16,14 @@ function get_module() {
 }
 
 function check_mvn_result() {
-  local result=$1
-  local msg=$2
-  echo "$msg result: $result"
-  if [[ $result -ne 0 ]]
-  then
-    echo "$msg fail"
-    exit 1
-  fi
+    local result=$1
+    local msg=$2
+    echo "$msg result: $result"
+    if [[ $result -ne 0 ]]
+    then
+      echo "$msg fail"
+      exit 1
+    fi
 }
 
 modules=()
@@ -43,22 +43,12 @@ fi
 modules_arg=$(printf ",%s" "${modules[@]}")
 modules_arg=${modules_arg:1}
 
-export MAVEN_OPTS="-client
-  -XX:+TieredCompilation
-  -XX:TieredStopAtLevel=1
-  -Xverify:none"
+echo "cp pre-commit to .git/hooks"
+cp -f ./buildSrc/pre-commit.sh  ./.git/hooks/pre-commit
+chmod 744 .git/hooks/pre-commit
 
-cp -rf ./pre-commit.sh ./.git/hooks/pre-commit
-chmod 744 ./.git/hooks/pre-commit
-
-echo "mvn clean compile"
-mvn clean compiler:compile
+mvn -pl "$modules_arg" clean test
 result=$?
-check_mvn_result $result "mvn compile"
-
-echo "mvn test"
-mvn -pl "$modules_arg" test
-result=$?
-check_mvn_result $result "mvn test"
+check_mvn_result $result "mvn clean test"
 
 echo "run git pre commit hook finish..."

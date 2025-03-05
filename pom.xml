@@ -14,8 +14,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <checkstyle.plugin>3.1.2</checkstyle.plugin>
-    <spotbugs.plugin>4.2.0</spotbugs.plugin>
-    <jacoco.vesion>0.8.7</jacoco.vesion>
+    <spotbugs.version>4.5.3.0</spotbugs.version>
+    <jacoco.vesion>0.8.8</jacoco.vesion>
   </properties>
 
 
@@ -43,6 +43,16 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${checkstyle.plugin}</version>
         <dependencies>
@@ -53,12 +63,13 @@
           </dependency>
         </dependencies>
         <configuration>
-          <configLocation>check/google-checker.xml</configLocation>
-          <suppressionsLocation>check/checkstyle-suppressions.xml</suppressionsLocation>
+          <configLocation>buildSrc/google-checker.xml</configLocation>
+          <suppressionsLocation>buildSrc/checkstyle-suppressions.xml</suppressionsLocation>
           <encoding>UTF-8</encoding>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <violationSeverity>warning</violationSeverity>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <linkXRef>false</linkXRef>
         </configuration>
         <executions>
@@ -80,18 +91,21 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin}</version>
+        <version>${spotbugs.version}</version>
         <dependencies>
           <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
-            <version>4.3.0</version>
+            <version>4.6.0</version>
           </dependency>
         </dependencies>
+        <configuration>
+          <excludeFilterFile>buildSrc/spotbugs-exclude.xml</excludeFilterFile>
+        </configuration>
         <executions>
           <execution>
             <id>check</id>
-            <phase>validate</phase>
+            <phase>process-classes</phase>
             <goals>
               <goal>check</goal>
             </goals>
@@ -105,11 +119,12 @@
         <version>3.1.0</version>
         <configuration>
           <installHooks>
-            <pre-commit>pre-commit.sh</pre-commit>
+            <pre-commit>buildSrc/pre-commit.sh</pre-commit>
           </installHooks>
         </configuration>
         <executions>
           <execution>
+            <phase>install</phase>
             <goals>
               <goal>install</goal>
             </goals>
@@ -121,6 +136,11 @@
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>${jacoco.vesion}</version>
+        <configuration>
+          <excludes>
+            <!--<exclude></exclude>-->
+          </excludes>
+        </configuration>
         <executions>
           <execution>
             <id>default-prepare-agent</id>
@@ -145,22 +165,22 @@
             <configuration>
               <rules>
                 <rule>
-                  <element>PACKAGE</element>
+                  <element>CLASS</element>
                   <limits>
                     <limit>
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                     <limit>
                       <counter>CLASS</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                     <limit>
                       <counter>INSTRUCTION</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                     <limit>
                       <counter>BRANCH</counter>
@@ -170,12 +190,12 @@
                     <limit>
                       <counter>COMPLEXITY</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                     <limit>
                       <counter>METHOD</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>1.0</minimum>
                     </limit>
                   </limits>
                 </rule>
